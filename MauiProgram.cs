@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using PosApp.Data;
 
 namespace PosApp
 {
@@ -18,7 +19,7 @@ namespace PosApp
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddSingleton<DatabaseService>();
             return builder.Build();
         }
     }

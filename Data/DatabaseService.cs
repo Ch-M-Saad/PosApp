@@ -9,7 +9,7 @@ namespace PosApp.Data
     public class DatabaseService
     {
         private readonly string _dbPath;
-
+        public string DbPath => _dbPath;
         public DatabaseService() 
         {
             // step 2 goes here — build _dbPath using Path.Combine + FileSystem.AppDataDirectory
@@ -27,6 +27,7 @@ namespace PosApp.Data
             // step 4 — open a connection, run CREATE TABLE IF NOT EXISTS Products
             await using var conn = GetConnection();
             await conn.OpenAsync();
+
             var cmd = conn.CreateCommand();
             cmd.CommandText = @"CREATE TABLE IF NOT EXISTS Products(
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,6 +36,24 @@ namespace PosApp.Data
                 Price REAL NOT NULL,
                 Quantity INTEGER NOT NULL,
                 Unit TEXT
+                )";
+            await cmd.ExecuteNonQueryAsync();
+         
+            cmd.CommandText = @"CREATE TABLE IF NOT EXISTS Sales(
+                ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                Date TEXT NOT NULL,
+                Total_Amount REAL NOT NULL        
+                )";
+            await cmd.ExecuteNonQueryAsync();
+
+            cmd.CommandText = @"CREATE TABLE IF NOT EXISTS SaleItems(
+                ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                Sale_ID INTEGER NOT NULL,
+                Product_ID INTEGER NOT NULL,
+                Quantity INTEGER NOT NULL, 
+                Price_At_Sale REAL NOT NULL,
+                FOREIGN KEY (Sale_ID) REFERENCES Sales(ID),
+                FOREIGN KEY (Product_ID) REFERENCES Products(ID)
                 )";
             await cmd.ExecuteNonQueryAsync();
 
