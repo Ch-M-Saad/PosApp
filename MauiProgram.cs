@@ -20,6 +20,8 @@ namespace PosApp
     		builder.Logging.AddDebug();
 #endif
             builder.Services.AddSingleton<DatabaseService>();
+            builder.Services.AddSingleton<IProductRepository, ProductRepository>();
+
             return builder.Build();
         }
     }
