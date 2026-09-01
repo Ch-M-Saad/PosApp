@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="PosApp.csproj" />
+  <Project Path="PosApp.csproj">
+    <Deploy />
+  </Project>
 </Solution>

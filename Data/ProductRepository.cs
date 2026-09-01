@@ -59,7 +59,32 @@ namespace PosApp.Data
 
             return products;
         }
-        public Task<Product?> GetByIdAsync(int id) => throw new NotImplementedException();
+        public async Task<Product?> GetByIdAsync(int id)
+        {
+
+            await using var conn = _databaseService.GetConnection();
+            await conn.OpenAsync();
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT ID, Name, Category, Price, Quantity, Unit FROM Products WHERE ID = @ID";
+            cmd.Parameters.AddWithValue("@ID", id);
+            await using var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                return new Product
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Category = reader.GetString(2),
+                    Price = reader.GetDecimal(3),
+                    Quantity = reader.GetInt32(4),
+                    Unit = reader.GetString(5)
+
+                };
+            }
+
+            return null;
+        }
         public Task UpdateAsync(Product p) => throw new NotImplementedException();
         public Task DeleteAsync(int id) => throw new NotImplementedException();
     }
