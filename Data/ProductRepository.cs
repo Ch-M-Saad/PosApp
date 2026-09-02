@@ -66,8 +66,8 @@ namespace PosApp.Data
             await conn.OpenAsync();
 
             var cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT ID, Name, Category, Price, Quantity, Unit FROM Products WHERE ID = @ID";
-            cmd.Parameters.AddWithValue("@ID", id);
+            cmd.CommandText = "SELECT ID, Name, Category, Price, Quantity, Unit FROM Products WHERE ID = @id";
+            cmd.Parameters.AddWithValue("@id", id);
             await using var reader = await cmd.ExecuteReaderAsync();
             if (await reader.ReadAsync())
             {
@@ -85,7 +85,23 @@ namespace PosApp.Data
 
             return null;
         }
-        public Task UpdateAsync(Product p) => throw new NotImplementedException();
+        public async Task UpdateAsync(Product p)
+        {
+            await using var conn = _databaseService.GetConnection();
+            await conn.OpenAsync();
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "UPDATE Products SET Name = @name, Category = @category, Price = @price, Quantity = @quantity, Unit = @unit WHERE ID = @id";
+            cmd.Parameters.AddWithValue("@name", p.Name);
+            cmd.Parameters.AddWithValue("@category", p.Category);
+            cmd.Parameters.AddWithValue("@price", p.Price);
+            cmd.Parameters.AddWithValue("@quantity", p.Quantity);
+            cmd.Parameters.AddWithValue("@unit", p.Unit);
+            cmd.Parameters.AddWithValue("@id", p.Id);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
         public Task DeleteAsync(int id) => throw new NotImplementedException();
     }
 }

@@ -17,12 +17,16 @@ namespace PosApp
         // TODO: remove before Sprint 5 — temporary test scaffolding (Below one)
         private async void OnCounterClicked(object? sender, EventArgs e)
         {
-            await _productRepository.AddAsync(new Product { Name = "Rice", Category = "Grocery", Price = 120, Quantity = 50, Unit = "kg" });
-            await _productRepository.AddAsync(new Product { Name = "Oil", Category = "Grocery", Price = 300, Quantity = 20, Unit = "litre" });
-            await _productRepository.AddAsync(new Product { Name = "Rice'); DROP TABLE Products; --", Category = "Test", Price = 1, Quantity = 1, Unit = "piece" });
+            await _productRepository.AddAsync(new Product { Name = "Sugar", Category = "Grocery", Price = 80, Quantity = 40, Unit = "kg" });
 
-            var all = await _productRepository.GetAllAsync();
-            await DisplayAlertAsync("Test", $"Products in DB: {all.Count}", "OK");
+            var all  = await _productRepository.GetAllAsync();
+            var firstProduct = all.FirstOrDefault();  // grab whichever product actually exists
+
+            if (firstProduct != null)
+            {
+                firstProduct.Price = 999;
+                await _productRepository.UpdateAsync(firstProduct);
+            }
         }
     }
 }
