@@ -102,6 +102,16 @@ namespace PosApp.Data
             await cmd.ExecuteNonQueryAsync();
         }
 
-        public Task DeleteAsync(int id) => throw new NotImplementedException();
+        public async Task DeleteAsync(int id) 
+        {
+            await using var conn = _databaseService.GetConnection();
+            await conn.OpenAsync();
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "DELETE FROM Products WHERE ID = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
     }
 }
