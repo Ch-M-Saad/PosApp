@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PosApp.Data;
+using PosApp.Views;
 
 namespace PosApp
 {
@@ -19,7 +20,8 @@ namespace PosApp
         }
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            var productsPage = Handler.MauiContext.Services.GetService<Views.ProductsPage>();
+            return new Window(productsPage);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace PosApp
 #endif
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<IProductRepository, ProductRepository>();
+            builder.Services.AddTransient<Views.ProductsPage>();
 
             return builder.Build();
         }
