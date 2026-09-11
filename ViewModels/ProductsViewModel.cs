@@ -11,14 +11,14 @@ namespace PosApp.ViewModels
 {
     public partial class ProductsViewModel : ObservableObject
     {
-        private readonly IProductRepository _productRepository;   // (1) what type goes here?
+        private readonly IProductRepository _productRepository;   
 
         [ObservableProperty]
         private bool _isBusy;
 
-        public ObservableCollection<Product> Products { get; } = new ObservableCollection<Product>();   // (2) how do you initialize an empty one?
+        public ObservableCollection<Product> Products { get; } = new ObservableCollection<Product>();   
 
-        public ProductsViewModel(IProductRepository productRepository)   // (3) constructor parameter type
+        public ProductsViewModel(IProductRepository productRepository)  
         {
             _productRepository = productRepository;
         }
@@ -26,18 +26,18 @@ namespace PosApp.ViewModels
         [RelayCommand]
         private async Task LoadAsync()
         {
-             IsBusy= true;                     // (4) which property flips on?
+             IsBusy= true;                     
 
-            Products.Clear();                 // (5) clear before repopulating — which method?
+            Products.Clear();                 
 
-            var products = await _productRepository.GetAllAsync();   // (6) which repository method loads everything?
+            var products = await _productRepository.GetAllAsync();   
 
             foreach (var p in products)
             {
-                Products.Add(p);            // (7) how do you add to an ObservableCollection?
+                Products.Add(p);            
             }
 
-            IsBusy = false;                    // (8) flip busy back off
+            IsBusy = false;                   
         }
     }
 }
