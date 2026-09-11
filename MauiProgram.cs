@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using PosApp.Data;
+using PosApp.ViewModels;
+using PosApp.Views;
 
 namespace PosApp
 {
@@ -21,7 +23,8 @@ namespace PosApp
 #endif
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<IProductRepository, ProductRepository>();
-            builder.Services.AddTransient<Views.ProductsPage>();
+            builder.Services.AddTransient<ProductsViewModel>();
+            builder.Services.AddTransient<ProductsPage>();
 
             return builder.Build();
         }
