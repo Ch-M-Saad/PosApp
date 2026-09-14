@@ -3,11 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PosApp.Views.ProductsPage"
              Title="Products">
-    
-    <RefreshView Command="{Binding LoadCommand}"
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Entry Placeholder="Name" />
+        <Entry Placeholder="Category" />
+        <Entry Placeholder="Price" />
+        <Entry Placeholder="Quantity" Keyboard="Numeric" />
+
+        <Picker Title="Unit">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>kg</x:String>
+                    <x:String>piece</x:String>
+                    <x:String>litre</x:String>
+                    <x:String>dozen</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="Save" />
+            <Button Text="Clear" />
+        </HorizontalStackLayout>
+
+        <RefreshView Command="{Binding LoadCommand}"
              IsRefreshing="{Binding IsBusy}">
+            
     <CollectionView ItemsSource="{Binding Products}">
-        <CollectionView.ItemTemplate>
+        <CollectionView.ItemTemplate>   
             <DataTemplate>
                 <Grid ColumnDefinitions="*,Auto,Auto" Padding="12,8" ColumnSpacing="10">
                     <Label Grid.Column="0" Text="{Binding Name}" />
@@ -17,6 +40,9 @@
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>
+            
     </RefreshView>
+        
+    </VerticalStackLayout>
     
 </ContentPage>
