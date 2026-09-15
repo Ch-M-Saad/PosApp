@@ -5,12 +5,12 @@
              Title="Products">
 
     <VerticalStackLayout Padding="20" Spacing="10">
-        <Entry Placeholder="Name" />
-        <Entry Placeholder="Category" />
-        <Entry Placeholder="Price" />
-        <Entry Placeholder="Quantity" Keyboard="Numeric" />
+        <Entry Placeholder="Name" Text="{Binding Name}"/>
+        <Entry Placeholder="Category" Text="{Binding Category}"/>
+        <Entry Placeholder="Price" Text="{Binding PriceText}"/>
+        <Entry Placeholder="Quantity" Keyboard="Numeric" Text="{Binding QuantityText}"/>
 
-        <Picker Title="Unit">
+        <Picker Title="Unit" SelectedItem="{Binding Unit}">
             <Picker.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>kg</x:String>

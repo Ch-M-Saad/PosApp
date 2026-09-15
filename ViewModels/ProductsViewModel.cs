@@ -11,6 +11,22 @@ namespace PosApp.ViewModels
 {
     public partial class ProductsViewModel : ObservableObject
     {
+
+        [ObservableProperty]
+        private string _name = string.Empty;
+
+        [ObservableProperty]
+        private string _category = string.Empty;
+
+        [ObservableProperty]
+        private string _priceText = string.Empty;   // (1) price, as a string
+
+        [ObservableProperty]
+        private string _quantityText = string.Empty;   // (2) quantity, as a string
+
+        [ObservableProperty]
+        private string _unit = string.Empty;
+
         private readonly IProductRepository _productRepository;   
 
         [ObservableProperty]
