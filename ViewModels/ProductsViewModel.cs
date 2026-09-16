@@ -12,6 +12,30 @@ namespace PosApp.ViewModels
     public partial class ProductsViewModel : ObservableObject
     {
 
+        [RelayCommand]
+        private async Task SaveAsync()
+        {
+            var product = new Product
+            {
+                Name = Name,                             
+                Category = Category,                         
+                Price = decimal.Parse(PriceText),              
+                Quantity = int.Parse(QuantityText),                
+                Unit = Unit                                
+            };
+
+            await _productRepository.AddAsync(product);       
+
+            await LoadCommand.ExecuteAsync(null);                  
+
+            Name = string.Empty;
+            Category = string.Empty;
+            PriceText = string.Empty;
+            QuantityText = string.Empty;
+            Unit = string.Empty;
+
+        }
+
         [ObservableProperty]
         private string _name = string.Empty;
 

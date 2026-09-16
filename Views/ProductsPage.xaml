@@ -22,7 +22,7 @@
         </Picker>
 
         <HorizontalStackLayout Spacing="10">
-            <Button Text="Save" />
+            <Button Text="Save" Command="{Binding SaveCommand}" />
             <Button Text="Clear" />
         </HorizontalStackLayout>
 
