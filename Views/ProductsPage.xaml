@@ -29,7 +29,9 @@
         <RefreshView Command="{Binding LoadCommand}"
              IsRefreshing="{Binding IsBusy}">
             
-    <CollectionView ItemsSource="{Binding Products}">
+    <CollectionView ItemsSource="{Binding Products}"
+                    SelectedItem="{Binding SelectedProduct}"      
+                    SelectionMode="Single">
         <CollectionView.ItemTemplate>   
             <DataTemplate>
                 <Grid ColumnDefinitions="*,Auto,Auto" Padding="12,8" ColumnSpacing="10">

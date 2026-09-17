@@ -12,6 +12,36 @@ namespace PosApp.ViewModels
     public partial class ProductsViewModel : ObservableObject
     {
 
+        [ObservableProperty]
+        private Product? _selectedProduct;
+
+        partial void OnSelectedProductChanged(Product? value)
+        {
+            if (value != null)
+            {
+                Name = value.Name;
+                Category = value.Category;
+                PriceText = value.Price.ToString();
+                QuantityText = value.Quantity.ToString();
+                Unit = value.Unit;
+            }
+        }
+
+        [ObservableProperty]
+        private string _name = string.Empty;
+
+        [ObservableProperty]
+        private string _category = string.Empty;
+
+        [ObservableProperty]
+        private string _priceText = string.Empty;   
+
+        [ObservableProperty]
+        private string _quantityText = string.Empty;   
+
+        [ObservableProperty]
+        private string _unit = string.Empty;
+
         [RelayCommand]
         private async Task SaveAsync()
         {
@@ -36,20 +66,6 @@ namespace PosApp.ViewModels
 
         }
 
-        [ObservableProperty]
-        private string _name = string.Empty;
-
-        [ObservableProperty]
-        private string _category = string.Empty;
-
-        [ObservableProperty]
-        private string _priceText = string.Empty;   // (1) price, as a string
-
-        [ObservableProperty]
-        private string _quantityText = string.Empty;   // (2) quantity, as a string
-
-        [ObservableProperty]
-        private string _unit = string.Empty;
 
         private readonly IProductRepository _productRepository;   
 
