@@ -22,8 +22,17 @@
         </Picker>
 
         <HorizontalStackLayout Spacing="10">
-            <Button Text="Save" Command="{Binding SaveCommand}" />
-            <Button Text="Clear" />
+            <Button Command="{Binding SaveCommand}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsEditMode}" Value="True">
+                        <Setter Property="Text" Value="Update" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsEditMode}" Value="False">
+                        <Setter Property="Text" Value="Save" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+            <Button Text="Clear" Command="{Binding ClearCommand}" />
         </HorizontalStackLayout>
 
         <RefreshView Command="{Binding LoadCommand}"

@@ -12,6 +12,8 @@ namespace PosApp.ViewModels
     public partial class ProductsViewModel : ObservableObject
     {
 
+        public bool IsEditMode => SelectedProduct != null;
+
         [ObservableProperty]
         private Product? _selectedProduct;
 
@@ -25,6 +27,7 @@ namespace PosApp.ViewModels
                 QuantityText = value.Quantity.ToString();
                 Unit = value.Unit;
             }
+            OnPropertyChanged(nameof(IsEditMode));
         }
 
         [ObservableProperty]
@@ -43,28 +46,54 @@ namespace PosApp.ViewModels
         private string _unit = string.Empty;
 
         [RelayCommand]
-        private async Task SaveAsync()
+        private void Clear()
         {
-            var product = new Product
-            {
-                Name = Name,                             
-                Category = Category,                         
-                Price = decimal.Parse(PriceText),              
-                Quantity = int.Parse(QuantityText),                
-                Unit = Unit                                
-            };
-
-            await _productRepository.AddAsync(product);       
-
-            await LoadCommand.ExecuteAsync(null);                  
-
             Name = string.Empty;
             Category = string.Empty;
             PriceText = string.Empty;
             QuantityText = string.Empty;
             Unit = string.Empty;
+            SelectedProduct = null;
+        }
+
+        [RelayCommand]
+        private async Task SaveAsync()
+        {
+            if (SelectedProduct == null)
+            {
+                var product = new Product
+                {
+                    Name = Name,
+                    Category = Category,
+                    Price = decimal.Parse(PriceText),
+                    Quantity = int.Parse(QuantityText),
+                    Unit = Unit
+                };
+
+                await _productRepository.AddAsync(product);
+            }
+            else
+            {
+                SelectedProduct.Name = Name;
+                SelectedProduct.Category = Category;
+                SelectedProduct.Price = decimal.Parse(PriceText);
+                SelectedProduct.Quantity = int.Parse(QuantityText);
+                SelectedProduct.Unit = Unit;
+
+                await _productRepository.UpdateAsync(SelectedProduct);
+            }
+
+                await LoadCommand.ExecuteAsync(null);
+                SelectedProduct = null;
+
+                Name = string.Empty;
+                Category = string.Empty;
+                PriceText = string.Empty;
+                QuantityText = string.Empty;
+                Unit = string.Empty;
 
         }
+        
 
 
         private readonly IProductRepository _productRepository;   
