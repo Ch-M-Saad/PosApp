@@ -12,6 +12,42 @@ namespace PosApp.ViewModels
     public partial class ProductsViewModel : ObservableObject
     {
 
+        private bool Validate(out string error)
+        {
+            if (string.IsNullOrWhiteSpace(Name) || Name.Length > 100)
+            {
+                error = "Name is required and must be under 100 characters.";
+                return false;
+            }
+
+            if (Category.Length > 50)
+            {
+                error = "Category must be under 50 characters.";
+                return false;
+            }
+
+            if (!decimal.TryParse(PriceText, out decimal price) || price <= 0)  
+    {
+                error = "Price must be a valid number greater than 0.";
+                return false;
+            }
+
+            if (!int.TryParse(QuantityText, out int quantity) || quantity < 0)
+{
+                error = "Quantity must be a valid whole number, 0 or more.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(Unit))
+            {
+                error = "Please select a unit.";
+                return false;
+            }
+
+            error = string.Empty;
+            return true;
+        }
+
         public bool IsEditMode => SelectedProduct != null;
 
         [ObservableProperty]
@@ -59,14 +95,23 @@ namespace PosApp.ViewModels
         [RelayCommand]
         private async Task SaveAsync()
         {
+            if (!Validate(out string error))
+            {
+                await Application.Current!.Windows[0].Page!.DisplayAlert("Invalid", error, "OK");
+                return;
+            }
+
+            decimal.TryParse(PriceText, out decimal price);
+            int.TryParse(QuantityText, out int quantity);
+
             if (SelectedProduct == null)
             {
                 var product = new Product
                 {
                     Name = Name,
                     Category = Category,
-                    Price = decimal.Parse(PriceText),
-                    Quantity = int.Parse(QuantityText),
+                    Price = price,
+                    Quantity = quantity,
                     Unit = Unit
                 };
 
@@ -76,24 +121,23 @@ namespace PosApp.ViewModels
             {
                 SelectedProduct.Name = Name;
                 SelectedProduct.Category = Category;
-                SelectedProduct.Price = decimal.Parse(PriceText);
-                SelectedProduct.Quantity = int.Parse(QuantityText);
+                SelectedProduct.Price = price;
+                SelectedProduct.Quantity = quantity;
                 SelectedProduct.Unit = Unit;
 
                 await _productRepository.UpdateAsync(SelectedProduct);
             }
 
-                await LoadCommand.ExecuteAsync(null);
-                SelectedProduct = null;
+            await LoadCommand.ExecuteAsync(null);
+            SelectedProduct = null;
 
-                Name = string.Empty;
-                Category = string.Empty;
-                PriceText = string.Empty;
-                QuantityText = string.Empty;
-                Unit = string.Empty;
-
+            Name = string.Empty;
+            Category = string.Empty;
+            PriceText = string.Empty;
+            QuantityText = string.Empty;
+            Unit = string.Empty;
         }
-        
+
 
 
         private readonly IProductRepository _productRepository;   
