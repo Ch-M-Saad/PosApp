@@ -97,45 +97,54 @@ namespace PosApp.ViewModels
         {
             if (!Validate(out string error))
             {
-                await Application.Current!.Windows[0].Page!.DisplayAlert("Invalid", error, "OK");
+                await Application.Current!.Windows[0].Page!.DisplayAlert("Invalid input", error, "OK");
                 return;
             }
 
             decimal.TryParse(PriceText, out decimal price);
             int.TryParse(QuantityText, out int quantity);
 
-            if (SelectedProduct == null)
+            try
             {
-                var product = new Product
+                if (SelectedProduct == null)
                 {
-                    Name = Name,
-                    Category = Category,
-                    Price = price,
-                    Quantity = quantity,
-                    Unit = Unit
-                };
+                    var product = new Product
+                    {
+                        Name = Name,
+                        Category = Category,
+                        Price = price,
+                        Quantity = quantity,
+                        Unit = Unit
+                    };
 
-                await _productRepository.AddAsync(product);
+                    await _productRepository.AddAsync(product);
+                }
+                else
+                {
+                    SelectedProduct.Name = Name;
+                    SelectedProduct.Category = Category;
+                    SelectedProduct.Price = price;
+                    SelectedProduct.Quantity = quantity;
+                    SelectedProduct.Unit = Unit;
+
+                    await _productRepository.UpdateAsync(SelectedProduct);
+                }
+
+                await LoadCommand.ExecuteAsync(null);
+                SelectedProduct = null;
+
+                Name = string.Empty;
+                Category = string.Empty;
+                PriceText = string.Empty;
+                QuantityText = string.Empty;
+                Unit = string.Empty;
+
+                await Application.Current!.Windows[0].Page!.DisplayAlert("Success", "Product saved successfully.", "OK"); 
             }
-            else
+            catch (Exception)   // (2) why do you think the exception variable itself isn't even named here?
             {
-                SelectedProduct.Name = Name;
-                SelectedProduct.Category = Category;
-                SelectedProduct.Price = price;
-                SelectedProduct.Quantity = quantity;
-                SelectedProduct.Unit = Unit;
-
-                await _productRepository.UpdateAsync(SelectedProduct);
+                await Application.Current!.Windows[0].Page!.DisplayAlert("Error", "An error occurred while saving the product.", "OK");   
             }
-
-            await LoadCommand.ExecuteAsync(null);
-            SelectedProduct = null;
-
-            Name = string.Empty;
-            Category = string.Empty;
-            PriceText = string.Empty;
-            QuantityText = string.Empty;
-            Unit = string.Empty;
         }
 
 
