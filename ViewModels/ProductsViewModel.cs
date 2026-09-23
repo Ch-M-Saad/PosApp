@@ -82,6 +82,40 @@ namespace PosApp.ViewModels
         private string _unit = string.Empty;
 
         [RelayCommand]
+        private async Task DeleteAsync()
+        {
+            if (SelectedProduct == null)
+                return;
+
+            bool confirmed = await Application.Current!.Windows[0].Page!.DisplayAlert(
+                "Delete product",
+                $"Delete {SelectedProduct.Name}? This cannot be undone.",
+                "Yes", "No");
+
+            if (!confirmed)
+                return;
+
+            try
+            {
+                await _productRepository.DeleteAsync(SelectedProduct.Id);   
+
+                await LoadCommand.ExecuteAsync(null);
+
+                SelectedProduct = null;  
+
+                Name = string.Empty;
+                Category = string.Empty;
+                PriceText = string.Empty;
+                QuantityText = string.Empty;
+                Unit = string.Empty;
+            }
+            catch (Exception)
+            {
+                await Application.Current!.Windows[0].Page!.DisplayAlert("Error", "An error occurred while deleting the product.", "OK");   
+            }
+        }
+
+        [RelayCommand]
         private void Clear()
         {
             Name = string.Empty;
@@ -141,7 +175,7 @@ namespace PosApp.ViewModels
 
                 await Application.Current!.Windows[0].Page!.DisplayAlert("Success", "Product saved successfully.", "OK"); 
             }
-            catch (Exception)   // (2) why do you think the exception variable itself isn't even named here?
+            catch (Exception)  
             {
                 await Application.Current!.Windows[0].Page!.DisplayAlert("Error", "An error occurred while saving the product.", "OK");   
             }

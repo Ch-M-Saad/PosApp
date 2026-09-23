@@ -33,6 +33,10 @@
                 </Button.Triggers>
             </Button>
             <Button Text="Clear" Command="{Binding ClearCommand}" />
+            
+            <Button Text="Delete"
+            Command="{Binding DeleteCommand}"
+            IsEnabled="{Binding IsEditMode}" />
         </HorizontalStackLayout>
 
         <RefreshView Command="{Binding LoadCommand}"
