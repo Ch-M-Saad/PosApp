@@ -5,6 +5,7 @@
              Title="Products">
 
     <VerticalStackLayout Padding="20" Spacing="10">
+        <SearchBar Placeholder="Search products..." Text="{Binding SearchText}" />
         <Entry Placeholder="Name" Text="{Binding Name}"/>
         <Entry Placeholder="Category" Text="{Binding Category}"/>
         <Entry Placeholder="Price" Text="{Binding PriceText}"/>

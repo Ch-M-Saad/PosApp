@@ -12,6 +12,25 @@ namespace PosApp.ViewModels
     public partial class ProductsViewModel : ObservableObject
     {
 
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+
+        private List<Product> _allProducts = new();
+
+        partial void OnSearchTextChanged(string value)
+        {
+            Products.Clear();
+
+            var matches = string.IsNullOrWhiteSpace(value)
+                ? _allProducts
+                : _allProducts.Where(p => p.Name.Contains(value, StringComparison.OrdinalIgnoreCase));
+
+            foreach (var p in matches)
+            {
+                Products.Add(p);
+            }
+        }
+
         private bool Validate(out string error)
         {
             if (string.IsNullOrWhiteSpace(Name) || Name.Length > 100)
@@ -181,8 +200,6 @@ namespace PosApp.ViewModels
             }
         }
 
-
-
         private readonly IProductRepository _productRepository;   
 
         [ObservableProperty]
@@ -202,7 +219,8 @@ namespace PosApp.ViewModels
 
             Products.Clear();                 
 
-            var products = await _productRepository.GetAllAsync();   
+            var products = await _productRepository.GetAllAsync();
+            _allProducts = products.ToList();
 
             foreach (var p in products)
             {
