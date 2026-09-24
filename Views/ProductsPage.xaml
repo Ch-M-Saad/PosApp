@@ -48,12 +48,14 @@
                     SelectionMode="Single">
         <CollectionView.ItemTemplate>   
             <DataTemplate>
-                <Grid ColumnDefinitions="*,Auto,Auto" Padding="12,8" ColumnSpacing="10">
-                    <Label Grid.Column="0" Text="{Binding Name}" />
-                    <Label Grid.Column="1" Text="{Binding Price, StringFormat='{0:C}'}" />
-                    <Label Grid.Column="2" Text="{Binding Quantity}" />
-                </Grid>
-            </DataTemplate>
+                        <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto" Padding="12,8" ColumnSpacing="10">
+                            <Label Grid.Column="0" Text="{Binding Name}" />
+                            <Label Grid.Column="1" Text="{Binding Category}" />
+                            <Label Grid.Column="2" Text="{Binding Price, StringFormat='Rs. {0:N2}'}" />
+                            <Label Grid.Column="3" Text="{Binding Quantity}" />
+                            <Label Grid.Column="4" Text="{Binding Unit}" />
+                        </Grid>
+                    </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>
             
